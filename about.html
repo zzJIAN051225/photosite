@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>关于我 · 香蕉黄油拿铁</title>
+  <meta name="description" content="关于摄影师香蕉黄油拿铁">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a class="nav-brand" href="index.html">Banana Butter Latte</a>
+    <button class="nav-toggle" id="navToggle" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">首页</a>
+      <a href="motion.html">作品集</a>
+      <a href="about.html" class="active">关于我</a>
+      <a href="contact.html">联系</a>
+    </div>
+  </nav>
+
+  <header class="page-head">
+    <h1 class="page-title">关于我</h1>
+    <p class="page-desc">ABOUT · 一个记录光影的人</p>
+  </header>
+
+  <main class="section" style="padding-top: 0;">
+    <div class="about-wrap">
+      <div class="avatar">
+        <img src="images/avatar.svg" alt="香蕉黄油拿铁的头像">
+      </div>
+      <div class="about-bio">
+        <div id="aboutBio"></div>
+        <ul class="timeline" id="timeline"></ul>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="foot-en">Banana Butter Latte</p>
+    <p class="foot-copy" id="year"></p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      const data = window.SITE;
+      if (!data) return;
+      const bio = document.getElementById("aboutBio");
+      if (bio) bio.innerHTML = data.about.bio.map(function (t) { return "<p>" + t + "</p>"; }).join("");
+      const tl = document.getElementById("timeline");
+      if (tl) tl.innerHTML = data.about.timeline.map(function (t) {
+        return '<li><span class="year">' + t.year + '</span><span class="event">' + t.event + '</span></li>';
+      }).join("");
+    })();
+  </script>
+</body>
+</html>

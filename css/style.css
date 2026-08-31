@@ -1,0 +1,639 @@
+/* ============================================
+   香蕉黄油拿铁 · 摄影作品网站
+   浅色极简（与 MOTION 页统一）· 首页 Hero 保留黑底
+   ============================================ */
+
+:root {
+  --bg: #f2f2ee;              /* 浅灰白背景（统一） */
+  --bg-soft: #e9e9e4;
+  --surface: #ecece6;
+  --text: #141414;            /* 深色文字 */
+  --muted: #6e6e68;
+  --faint: #a3a39c;
+  --line: rgba(20, 20, 20, 0.12);
+  --nav-h: 64px;
+  --font-cn: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-en: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-cn);
+  font-weight: 300;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+::selection { background: rgba(20, 20, 20, 0.12); }
+
+/* ---------- 顶部导航 ---------- */
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  background: transparent;
+  transition: background 0.4s ease, backdrop-filter 0.4s ease;
+  z-index: 100;
+  /* 黑底白字 / 白底黑字 自适应（首页 Hero 黑底上可见） */
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+.nav.scrolled {
+  background: transparent;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-brand {
+  font-family: var(--font-en);
+  font-size: 13px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #fff;              /* 配合 difference 混合：黑底白字 / 白底黑字 */
+  opacity: 0.9;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+}
+
+.nav-links a {
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  color: #fff;
+  opacity: 0.65;
+  transition: opacity 0.3s ease;
+}
+
+.nav-links a:hover { opacity: 1; }
+.nav-links a.active { opacity: 1; }
+
+/* 汉堡菜单（移动端） */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  position: relative;
+  z-index: 110;
+}
+
+.nav-toggle span {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  height: 1px;
+  background: #fff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.nav-toggle span:nth-child(1) { top: 12px; }
+.nav-toggle span:nth-child(2) { top: 18px; }
+.nav-toggle span:nth-child(3) { top: 24px; }
+
+.nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ---------- 首页 Hero（两阶段：纯黑呼吸名字 → 全屏背景图） ---------- */
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer; /* 提示可点击跳过等待 */
+  background: #000;
+}
+
+/* 阶段二背景层：默认透明，过渡时淡入 + 轻微推近 */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 2.2s ease, transform 6s ease;
+  pointer-events: none;
+}
+
+.hero.phase2 .hero-bg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 阶段一文字层：居中，呼吸明暗闪动 */
+.hero-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 24px;
+  transition: opacity 1.6s ease, transform 1.6s ease;
+}
+
+/* 阶段二：背景变纯白，名字保持居中，颜色切换为深色（始终可见） */
+.hero.phase2 .hero-text {
+  opacity: 1;
+  transform: none;
+  pointer-events: none;
+}
+
+.hero.phase2 .hero-en {
+  color: var(--muted);
+  animation: none;
+  opacity: 1;
+}
+
+.hero.phase2 .hero-name {
+  color: var(--text);
+  animation: none;
+  opacity: 1;
+}
+
+.hero.phase2 .hero-tagline {
+  color: var(--faint);
+  animation: none;
+  opacity: 1;
+}
+
+/* 英文名：小号、字距大、克制（Hero 固定黑底，用白色系） */
+.hero-en {
+  font-family: var(--font-en);
+  font-size: 12px;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 26px;
+  opacity: 0;
+  animation: fadeUp 1.6s ease 0.4s forwards;
+}
+
+/* 中文名：字号适中偏小、字距大、细字重，克制高级不土气 */
+.hero-name {
+  font-size: clamp(30px, 5.2vw, 52px);
+  font-weight: 200;
+  letter-spacing: 0.28em;
+  color: #ffffff;
+  line-height: 1.4;
+  opacity: 0;
+  animation: fadeUp 1.8s ease 0.7s forwards;
+}
+
+.hero-tagline {
+  margin-top: 28px;
+  font-size: 13px;
+  letter-spacing: 0.42em;
+  color: rgba(255, 255, 255, 0.4);
+  opacity: 0;
+  animation: fadeUp 1.8s ease 1.1s forwards;
+}
+
+/* 呼吸感 = 文字以呼吸般有规律的明暗闪动（透明度起伏，非缩放），节奏舒缓 */
+.hero-text {
+  animation: breathe 6.5s ease-in-out 2.4s infinite;
+  will-change: opacity;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 阶段二角落名字：已废弃（名字保持居中显示），隐藏避免重复 */
+.hero-mini {
+  display: none;
+}
+
+/* 阶段一"点击进入"提示 */
+.hero-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: rgba(255, 255, 255, 0.45);
+  opacity: 0;
+  animation: fadeUp 1.6s ease 2.2s forwards;
+}
+
+/* 背景图加载失败时：停留在黑底，提示文字隐藏 */
+.hero.no-bg .hero-hint { display: none; }
+
+/* ---------- 通用区块 ---------- */
+.section {
+  padding: 110px 48px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.section-head {
+  margin-bottom: 56px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.section-sub {
+  font-size: clamp(22px, 3.4vw, 34px);
+  font-weight: 200;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- 作品网格 ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.grid-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--surface);
+}
+
+.grid-item img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform 0.9s ease, opacity 0.6s ease;
+}
+
+.grid-item:hover img { transform: scale(1.05); }
+
+.grid-item .caption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 48px 20px 16px;
+  background: linear-gradient(to top, rgba(0,0,0,0.72), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.grid-item:hover .caption { opacity: 1; }
+
+.grid-item .caption h3 {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+
+.grid-item .caption span {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.18em;
+}
+
+/* ---------- 分类筛选 Tabs ---------- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 36px;
+  margin-bottom: 44px;
+}
+
+.filter-btn {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  color: var(--faint);
+  padding: 6px 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.filter-btn::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 1px;
+  background: var(--text);
+  transition: width 0.35s ease;
+}
+
+.filter-btn:hover { color: var(--muted); }
+.filter-btn.active { color: var(--text); }
+.filter-btn.active::after { width: 100%; }
+
+.empty-tip {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--faint);
+  font-size: 14px;
+  letter-spacing: 0.25em;
+  padding: 80px 0;
+}
+
+/* ---------- Lightbox ---------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 5, 0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.lightbox.open { opacity: 1; visibility: visible; }
+
+.lightbox-inner {
+  width: 100%;
+  max-width: 1100px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.lightbox img {
+  max-height: 74vh;
+  max-width: 100%;
+  object-fit: contain;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+}
+
+.lightbox-meta {
+  text-align: center;
+}
+
+.lightbox-meta h3 {
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  margin-bottom: 6px;
+}
+
+.lightbox-meta .meta-line {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  line-height: 2;
+}
+
+.lightbox-meta .story {
+  font-size: 13px;
+  color: var(--faint);
+  margin-top: 10px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lb-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 32px;
+  cursor: pointer;
+  padding: 16px;
+  transition: color 0.3s ease;
+  z-index: 210;
+}
+.lb-btn:hover { color: var(--text); }
+.lb-prev { left: 16px; }
+.lb-next { right: 16px; }
+
+.lb-close {
+  position: absolute;
+  top: 20px; right: 24px;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 210;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.lb-close:hover { color: var(--text); transform: rotate(90deg); }
+
+.lb-counter {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-en);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--faint);
+}
+
+/* ---------- 关于我 ---------- */
+.about-wrap {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 72px;
+  align-items: start;
+}
+
+.avatar {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.about-bio p {
+  color: var(--muted);
+  margin-bottom: 20px;
+  font-size: 15px;
+  max-width: 640px;
+}
+
+.about-bio strong { color: var(--text); font-weight: 400; }
+
+.timeline {
+  margin-top: 44px;
+  border-top: 1px solid var(--line);
+  padding-top: 36px;
+}
+
+.timeline li {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 24px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.timeline .year {
+  font-family: var(--font-en);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--faint);
+}
+
+.timeline .event { font-size: 14px; color: var(--muted); }
+
+/* ---------- 联系 ---------- */
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 60px;
+}
+
+.contact-row {
+  display: flex;
+  align-items: baseline;
+  gap: 28px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.contact-row .label {
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--faint);
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.contact-row a, .contact-row span {
+  font-size: 15px;
+  color: var(--text);
+  letter-spacing: 0.06em;
+  transition: color 0.3s ease;
+}
+
+.contact-row a:hover { color: var(--muted); }
+
+/* ---------- 页脚 ---------- */
+.footer {
+  padding: 56px 48px 64px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+.footer .foot-en {
+  font-family: var(--font-en);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 12px;
+}
+
+.footer .foot-copy {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--faint);
+}
+
+/* ---------- 页面头部（内页） ---------- */
+.page-head {
+  padding: calc(var(--nav-h) + 96px) 48px 40px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: clamp(30px, 5vw, 48px);
+  font-weight: 200;
+  letter-spacing: 0.14em;
+}
+
+.page-desc {
+  margin-top: 16px;
+  font-size: 13px;
+  letter-spacing: 0.24em;
+  color: var(--faint);
+}
+
+/* ---------- 作品集页：上下大量留白，作品区约占屏幕高度三分之一 ---------- */
+.gallery-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18vh 48px 22vh; /* 上 18vh + 下 22vh 留白 */
+}
+
+/* 首屏观感：标题之后是大量留白，网格从视口中下部开始 */
+.gallery-main .filter-bar {
+  margin-bottom: 48px;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1024px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; }
+  .nav-links {
+    position: fixed;
+    inset: 0;
+    background: rgba(242, 242, 238, 0.97);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+  }
+  .nav-links.open { opacity: 1; visibility: visible; }
+  .nav-links a { font-size: 16px; letter-spacing: 0.3em; color: var(--text); opacity: 1; }
+  .nav-links a:hover { opacity: 0.6; }
+  .nav-toggle { display: block; }
+
+  .section { padding: 80px 20px; }
+  .grid { grid-template-columns: 1fr; gap: 16px; }
+
+  .about-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .avatar { width: 180px; height: 180px; }
+
+  .page-head { padding: calc(var(--nav-h) + 64px) 20px 32px; }
+  .contact-row { flex-direction: column; gap: 6px; }
+  .footer { padding: 40px 20px 48px; }
+  .gallery-main { padding: 12vh 20px 16vh; }
+}

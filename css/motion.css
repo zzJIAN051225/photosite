@@ -1,0 +1,572 @@
+/* ============================================
+   MOTION · 极简影像作品集页
+   浅灰白背景 / 大量留白 / 无衬线大写 / 电影感
+   ============================================ */
+
+:root {
+  --paper: #f2f2ee;        /* 浅灰白背景 */
+  --ink: #141414;          /* 深色文字 */
+  --ink-soft: #6e6e68;     /* 次级文字 */
+  --ink-faint: #a8a8a0;    /* 弱化文字 */
+  --line: rgba(20, 20, 20, 0.12);
+  --font: "Helvetica Neue", "Inter", "Arial", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; background: none; border: 0; cursor: pointer; color: inherit; }
+::selection { background: var(--ink); color: var(--paper); }
+
+/* ---------- 顶部：左 CONTACT / 右 MENU+汉堡 ---------- */
+.m-top {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 44px;
+  z-index: 100;
+  mix-blend-mode: difference;   /* 无论背景深浅都保持可读 */
+}
+
+.m-contact {
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #fff;
+  transition: opacity 0.3s ease;
+}
+.m-contact:hover { opacity: 0.55; }
+
+.m-right { display: flex; align-items: center; }
+
+.m-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #fff;
+}
+
+.m-menu-text {
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  transition: opacity 0.3s ease;
+}
+.m-menu-btn:hover .m-menu-text { opacity: 0.55; }
+
+/* 汉堡按钮（两条线） */
+.m-hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  width: 26px;
+  height: 26px;
+  transition: transform 0.4s ease;
+}
+
+.m-hamburger span {
+  display: block;
+  height: 1px;
+  background: #fff;
+  transition: transform 0.4s ease, opacity 0.3s ease;
+}
+
+.m-menu-btn.open .m-hamburger { transform: rotate(45deg); }
+.m-menu-btn.open .m-hamburger span:nth-child(2) { transform: translateY(-8px) rotate(90deg); }
+
+/* ---------- 右侧竖排 HOME ---------- */
+.m-home-rail {
+  position: fixed;
+  right: 34px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font-size: 11px;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  z-index: 90;
+  transition: color 0.3s ease;
+}
+.m-home-rail:hover { color: var(--ink); }
+
+/* ---------- 右侧大标题 MOTION ---------- */
+.m-title {
+  position: fixed;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font-size: clamp(48px, 9vw, 120px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  opacity: 0.06;
+  z-index: 5;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- 横竖筛选栏（ALL / LANDSCAPE / PORTRAIT） ---------- */
+.m-filter {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 96px;
+  display: flex;
+  gap: 28px;
+  z-index: 90;
+  background: var(--paper);
+  padding: 8px 20px;
+  border: 1px solid var(--line);
+  border-radius: 40px;
+}
+
+.m-filter-btn {
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 4px 2px;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.m-filter-btn::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 1px;
+  background: var(--ink);
+  transition: width 0.3s ease;
+}
+
+.m-filter-btn:hover { color: var(--ink-soft); }
+.m-filter-btn.active { color: var(--ink); }
+.m-filter-btn.active::after { width: 100%; }
+
+/* ---------- 横向滚动舞台（原生 scroll-snap） ----------
+   浏览器原生保证滚动边界：永远不会"看不到最后一张" */
+.m-stage {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0 8vw 0 10vw;
+  cursor: grab;
+  scrollbar-width: none;      /* 隐藏滚动条 Firefox */
+  -ms-overflow-style: none;   /* IE/Edge */
+}
+.m-stage::-webkit-scrollbar { display: none; }  /* Chrome/Safari */
+
+/* 滚轮自由滚动时临时禁用吸附（JS 控制） */
+.m-stage.no-snap { scroll-snap-type: none; }
+
+.m-stage.dragging { cursor: grabbing; user-select: none; }
+
+.m-track {
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 4vw, 64px);
+  position: relative;
+}
+
+/* ---------- 作品卡片 ----------
+   横竖自适应方案（方案A：动态高度）：
+   - 横图：高度 38vh，宽度按比例（宽）
+   - 竖图：高度 55vh，宽度按比例（高）
+   不裁切、不损失构图，横竖各自舒展，错落有编辑感 */
+.m-card {
+  flex-shrink: 0;
+  height: clamp(220px, 38vh, 420px);  /* 横图高度 */
+  width: auto;                        /* 宽度由图片比例决定 */
+  position: relative;
+  transition: transform 0.7s ease, height 0.4s ease;
+  scroll-snap-align: center;          /* 滚动吸附居中 */
+}
+
+/* 竖图卡片：更高，让竖图宽度与横图视觉接近 */
+.m-card.portrait {
+  height: clamp(320px, 55vh, 620px);
+}
+
+/* 当前居中卡片轻微放大强调（不再压暗其他卡片） */
+.m-card.active { transform: scale(1.02); }
+
+.m-card a.cover {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+}
+
+.m-card img {
+  height: 100%;
+  width: auto;              /* 宽度按比例自适应 */
+  max-width: none;
+  display: block;
+  transform: scale(1.001);
+  transition: transform 1.2s ease;
+}
+
+/* 悬停微动效 */
+.m-card:hover img {
+  transform: scale(1.045);
+}
+
+/* 封面上的项目编号 */
+.m-card .m-no {
+  position: absolute;
+  top: -34px;
+  left: 4px;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--ink-soft);
+}
+
+/* 卡片下方信息行（默认隐藏，悬停/激活显现，编辑设计感） */
+.m-card .m-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 14px;
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.m-card.active .m-info,
+.m-card:hover .m-info { opacity: 1; transform: translateY(0); }
+
+.m-card .m-info .name { color: var(--ink); font-weight: 400; }
+
+/* ---------- 底部留白：PREV / SCROLL / NEXT + 计数 ---------- */
+.m-bottom {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: 0;
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 44px;
+  z-index: 100;
+}
+
+/* 英文文字导航按钮（PREV / NEXT） */
+.m-nav-btn {
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 10px 0;
+  position: relative;
+  transition: opacity 0.3s ease;
+}
+
+.m-nav-btn::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 1px;
+  background: var(--ink);
+  transition: width 0.35s ease;
+}
+
+.m-nav-btn:hover { opacity: 0.6; }
+.m-nav-btn:hover::after { width: 100%; }
+
+.m-nav-btn:disabled {
+  opacity: 0.22;
+  cursor: default;
+  pointer-events: none;
+}
+
+.m-scroll-hint {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.m-scroll-hint::after {
+  content: "";
+  width: 1px;
+  height: 34px;
+  background: var(--ink-faint);
+  animation: scrollPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.m-counter {
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* ---------- 汉堡展开菜单遮罩 ---------- */
+.m-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+  z-index: 95;
+}
+
+.m-menu-overlay.open { opacity: 1; visibility: visible; }
+
+.m-menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  text-align: center;
+}
+
+.m-menu-nav a {
+  font-size: clamp(26px, 5vw, 44px);
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease, color 0.3s ease;
+}
+
+.m-menu-overlay.open .m-menu-nav a {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.m-menu-nav a:nth-child(1) { transition-delay: 0.08s; }
+.m-menu-nav a:nth-child(2) { transition-delay: 0.14s; }
+.m-menu-nav a:nth-child(3) { transition-delay: 0.20s; }
+.m-menu-nav a:nth-child(4) { transition-delay: 0.26s; }
+
+.m-menu-nav a:hover { color: var(--ink-soft); }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 768px) {
+  .m-top { padding: 0 20px; height: 60px; }
+  .m-bottom { padding: 0 20px; height: 68px; gap: 12px; }
+
+  .m-stage { padding: 0 0 0 14vw; }
+
+  /* 移动端卡片高度略小，宽度仍随图片比例自适应 */
+  .m-card { height: clamp(160px, 30vh, 280px); }
+  .m-card.portrait { height: clamp(240px, 44vh, 420px); }
+
+  .m-title { font-size: clamp(40px, 14vw, 80px); right: 4px; }
+
+  .m-home-rail { right: 16px; font-size: 10px; }
+
+  .m-card .m-no { top: -26px; }
+  .m-info { font-size: 11px; }
+
+  /* 移动端底部：PREV 左、NEXT 右，隐藏 SCROLL 提示避免拥挤 */
+  .m-scroll-hint { display: none; }
+  .m-nav-btn { font-size: 10px; letter-spacing: 0.3em; }
+  .m-counter { font-size: 11px; }
+}
+
+/* ============================================
+   video.html 子页面（项目详情 · 杂志式双栏）
+   ============================================ */
+.video-page { background: var(--paper); }
+
+.video-main {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 120px 48px 80px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+/* 双栏网格：左图（约 60%）右文（约 40%） */
+.video-grid {
+  display: grid;
+  grid-template-columns: 6fr 4fr;
+  gap: clamp(40px, 5vw, 88px);
+  align-items: center;
+  width: 100%;
+}
+
+/* 左：照片（保留原比例，不裁切；竖图自动限高居中） */
+.video-frame {
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-frame.fade-in { opacity: 1; transform: translateY(0); }
+
+.video-frame img {
+  max-width: 100%;
+  max-height: 78vh;
+  width: auto;
+  height: auto;
+  display: block;
+  box-shadow: 0 30px 60px rgba(20, 20, 20, 0.12);
+}
+
+/* 右：信息栏 */
+.video-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.video-index {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+.video-title {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.video-kicker {
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* 事实清单：拍摄时间 / 地点 / 器材（杂志式 dt/dd） */
+.video-facts {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.fact {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.fact dt {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
+
+.fact dd {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  text-align: right;
+}
+
+/* 故事 */
+.video-story { margin-top: 8px; }
+
+.video-story h2 {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--ink-faint);
+  font-weight: 300;
+  margin-bottom: 12px;
+}
+
+.video-story p {
+  font-size: 15px;
+  line-height: 2.1;
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+
+.video-desc {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+}
+
+/* 上一项 / 下一项 */
+.video-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.video-nav a {
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+.video-nav a:hover { color: var(--ink); }
+
+@media (max-width: 900px) {
+  .video-grid { grid-template-columns: 1fr; }
+  .video-frame img { aspect-ratio: 16 / 10; }
+}
+
+@media (max-width: 768px) {
+  .video-main { padding: 100px 20px 60px; }
+  .video-nav { flex-direction: column; gap: 18px; }
+}

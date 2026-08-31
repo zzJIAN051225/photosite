@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOTION · 影像作品集</title>
+  <meta name="description" content="MOTION — 摄影与影像作品集，横向滚动画廊">
+  <link rel="stylesheet" href="css/motion.css">
+</head>
+<body>
+
+  <!-- 顶部：左 CONTACT / 右 MENU + 汉堡 -->
+  <header class="m-top">
+    <a class="m-contact" href="contact.html">CONTACT</a>
+    <div class="m-right">
+      <button class="m-menu-btn" id="menuBtn">
+        <span class="m-menu-text">MENU</span>
+        <span class="m-hamburger" id="hamburger"><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 右侧竖排 HOME 导航 -->
+  <a class="m-home-rail" href="index.html">HOME</a>
+
+  <!-- 右侧大标题 MOTION -->
+  <div class="m-title" aria-hidden="true">MOTION</div>
+
+  <!-- 横竖筛选：ALL / LANDSCAPE / PORTRAIT -->
+  <div class="m-filter" id="filterBar">
+    <button class="m-filter-btn active" data-filter="all">ALL</button>
+    <button class="m-filter-btn" data-filter="landscape">LANDSCAPE</button>
+    <button class="m-filter-btn" data-filter="portrait">PORTRAIT</button>
+  </div>
+
+  <!-- 横向滚动作品轨 -->
+  <main class="m-stage" id="stage">
+    <div class="m-track" id="track">
+      <!-- 封面卡片由 JS 渲染 -->
+    </div>
+  </main>
+
+  <!-- 底部留白：PREV / SCROLL / NEXT + 计数 -->
+  <footer class="m-bottom">
+    <button class="m-nav-btn" id="prevBtn">PREV</button>
+    <span class="m-scroll-hint">SCROLL</span>
+    <span class="m-counter" id="counter">01 / 16 · NYAD</span>
+    <button class="m-nav-btn" id="nextBtn">NEXT</button>
+  </footer>
+
+  <!-- 汉堡展开的菜单遮罩 -->
+  <div class="m-menu-overlay" id="menuOverlay">
+    <nav class="m-menu-nav">
+      <a href="index.html">HOME</a>
+      <a href="motion.html" class="active">MOTION</a>
+      <a href="about.html">ABOUT</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+  </div>
+
+  <script src="js/motion-data.js"></script>
+  <script src="js/motion.js"></script>
+</body>
+</html>

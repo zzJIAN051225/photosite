@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOTION · 项目详情</title>
+  <meta name="description" content="MOTION — 影像项目详情页">
+  <link rel="stylesheet" href="css/motion.css">
+</head>
+<body class="video-page">
+
+  <!-- 顶部：左 MOTION（返回） / 右 MENU + 汉堡 -->
+  <header class="m-top">
+    <a class="m-contact" href="motion.html">← MOTION</a>
+    <div class="m-right">
+      <button class="m-menu-btn" id="menuBtn">
+        <span class="m-menu-text">MENU</span>
+        <span class="m-hamburger" id="hamburger"><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 汉堡展开的菜单遮罩 -->
+  <div class="m-menu-overlay" id="menuOverlay">
+    <nav class="m-menu-nav">
+      <a href="motion.html">MOTION</a>
+      <a href="motion.html">MOTION</a>
+      <a href="about.html">ABOUT</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+  </div>
+
+  <!-- 杂志式双栏：左图右文 -->
+  <main class="video-main">
+    <div class="video-grid">
+      <!-- 左：照片 -->
+      <figure class="video-frame" id="videoFrame"></figure>
+
+      <!-- 右：信息（时间/故事等） -->
+      <aside class="video-info">
+        <p class="video-index" id="videoIndex">01 / 16</p>
+        <h1 class="video-title" id="videoTitle">NYAD</h1>
+        <p class="video-kicker" id="videoKicker">FILM · 2025</p>
+
+        <dl class="video-facts">
+          <div class="fact"><dt>拍摄时间</dt><dd id="factShot">2025.01.12</dd></div>
+          <div class="fact"><dt>拍摄地点</dt><dd id="factLoc">挪威 · 罗弗敦</dd></div>
+          <div class="fact"><dt>器材</dt><dd id="factCam">Sony A7R IV · 24mm f/8</dd></div>
+        </dl>
+
+        <div class="video-story">
+          <h2>STORY</h2>
+          <p id="videoStory">项目故事……</p>
+        </div>
+
+        <p class="video-desc" id="videoDesc"></p>
+
+        <!-- 上一个 / 下一个项目 -->
+        <nav class="video-nav">
+          <a href="#" id="prevLink">← 上一项</a>
+          <a href="#" id="nextLink">下一项 →</a>
+        </nav>
+      </aside>
+    </div>
+  </main>
+
+  <script src="js/motion-data.js"></script>
+  <script src="js/video.js"></script>
+</body>
+</html>

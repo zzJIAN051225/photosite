@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>联系 · 香蕉黄油拿铁</title>
+  <meta name="description" content="联系摄影师香蕉黄油拿铁">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a class="nav-brand" href="index.html">Banana Butter Latte</a>
+    <button class="nav-toggle" id="navToggle" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">首页</a>
+      <a href="motion.html">作品集</a>
+      <a href="about.html">关于我</a>
+      <a href="contact.html" class="active">联系</a>
+    </div>
+  </nav>
+
+  <header class="page-head">
+    <h1 class="page-title">联系</h1>
+    <p class="page-desc">CONTACT · 关于光影的交流，欢迎来信</p>
+  </header>
+
+  <main class="section" style="padding-top: 0;">
+    <div class="contact-list" id="contactList"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="foot-en">Banana Butter Latte</p>
+    <p class="foot-copy" id="year"></p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      const data = window.SITE;
+      if (!data) return;
+      const list = document.getElementById("contactList");
+      if (!list) return;
+
+      const email = data.contact.email || "";
+      const socials = data.contact.socials || [];
+
+      let html = '';
+      if (email) {
+        html +=
+          '<div class="contact-row">' +
+            '<span class="label">Email</span>' +
+            '<a href="mailto:' + email + '">' + email + '</a>' +
+          '</div>';
+      }
+      socials.forEach(function (s) {
+        html +=
+          '<div class="contact-row">' +
+            '<span class="label">' + s.name + '</span>' +
+            '<a href="' + s.url + '" target="_blank" rel="noopener">' + (s.note || s.name) + '</a>' +
+          '</div>';
+      });
+
+      list.innerHTML = html;
+    })();
+  </script>
+</body>
+</html>
