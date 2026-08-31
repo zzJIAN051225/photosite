@@ -42,10 +42,22 @@
     story.textContent = p.story || p.desc || "";
     desc.textContent = p.desc || "";
 
-    /* 大图占位；换成你的视频时改为 <video controls> */
-    var imgSrc = p.img || p.thumb || ("images/motion/" + p.id + ".svg");
+    /* 大图：先显示缩略图占位，再异步加载大图（点开更快） */
+    var fullSrc = p.img || ("images/motion/" + p.id + ".svg");
+    var thumbSrc = p.thumb || fullSrc;
     frame.innerHTML =
-      '<img src="' + imgSrc + '" alt="' + p.name + '">';
+      '<img src="' + thumbSrc + '" alt="' + p.name + '" data-full="' + fullSrc + '" class="lazy-full">';
+
+    // 用新 Image 预加载大图，完成后替换缩略图（避免阻塞首屏）
+    var fullImg = new Image();
+    fullImg.onload = function () {
+      var cur = frame.querySelector("img.lazy-full");
+      if (cur && cur.dataset.full === fullSrc) {
+        cur.src = fullSrc;
+        cur.classList.add("loaded");
+      }
+    };
+    fullImg.src = fullSrc;
 
     var prev = PROJECTS[(i - 1 + PROJECTS.length) % PROJECTS.length];
     var next = PROJECTS[(i + 1) % PROJECTS.length];

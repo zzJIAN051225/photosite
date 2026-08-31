@@ -44,6 +44,15 @@ button { font-family: inherit; background: none; border: 0; cursor: pointer; col
   mix-blend-mode: difference;   /* 无论背景深浅都保持可读 */
 }
 
+/* 菜单打开时：顶栏（含汉堡按钮）提到遮罩之上，保证能关闭菜单 */
+.m-top.menu-open {
+  z-index: 600;
+  mix-blend-mode: normal;
+}
+.m-top.menu-open .m-contact,
+.m-top.menu-open .m-menu-text { color: var(--ink); }
+.m-top.menu-open .m-hamburger span { background: var(--ink); }
+
 .m-contact {
   font-size: 12px;
   letter-spacing: 0.3em;
@@ -359,7 +368,7 @@ button { font-family: inherit; background: none; border: 0; cursor: pointer; col
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.45s ease, visibility 0.45s ease;
-  z-index: 95;
+  z-index: 500;   /* 最高层：盖住所有其他固定元素，避免菜单与背景冲突 */
 }
 
 .m-menu-overlay.open { opacity: 1; visibility: visible; }
@@ -461,7 +470,12 @@ button { font-family: inherit; background: none; border: 0; cursor: pointer; col
   height: auto;
   display: block;
   box-shadow: 0 30px 60px rgba(20, 20, 20, 0.12);
+  transition: opacity 0.5s ease;
 }
+
+/* 大图加载完成前缩略图轻微模糊（加载中状态），加载后清晰 */
+.video-frame img.lazy-full { opacity: 0.75; filter: blur(2px); }
+.video-frame img.lazy-full.loaded { opacity: 1; filter: none; }
 
 /* 右：信息栏 */
 .video-info {

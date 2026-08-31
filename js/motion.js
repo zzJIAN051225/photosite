@@ -23,7 +23,8 @@
       '<article class="m-card' + (isPortrait ? " portrait" : "") + '" data-index="' + p.id + '" data-ori="' + (isPortrait ? "portrait" : "landscape") + '">' +
         '<span class="m-no">' + p.id + '</span>' +
         '<a class="cover" href="video.html?p=' + p.id + '">' +
-          '<img src="' + imgSrc + '" alt="' + p.name + '" draggable="false">' +
+          // loading="lazy"：首屏只加载可见的照片，滚动到才加载（大幅提速）
+          '<img src="' + imgSrc + '" alt="' + p.name + '" loading="lazy" draggable="false">' +
         '</a>' +
         '<div class="m-info">' +
           '<span class="name">' + p.name + '</span>' +
@@ -169,16 +170,19 @@
   /* ---------- 汉堡菜单 ---------- */
   var menuBtn = document.getElementById("menuBtn");
   var overlay = document.getElementById("menuOverlay");
+  var topBar = document.querySelector(".m-top");
 
   if (menuBtn && overlay) {
     menuBtn.addEventListener("click", function () {
       var open = overlay.classList.toggle("open");
       menuBtn.classList.toggle("open", open);
+      if (topBar) topBar.classList.toggle("menu-open", open);
     });
     overlay.addEventListener("click", function (e) {
       if (e.target.tagName === "A") {
         overlay.classList.remove("open");
         menuBtn.classList.remove("open");
+        if (topBar) topBar.classList.remove("menu-open");
       }
     });
   }
