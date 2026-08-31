@@ -425,6 +425,36 @@ button { font-family: inherit; background: none; border: 0; cursor: pointer; col
   .m-scroll-hint { display: none; }
   .m-nav-btn { font-size: 10px; letter-spacing: 0.3em; }
   .m-counter { font-size: 11px; }
+
+  /* 移动端菜单：收成右上角小圆点按钮，占一点点空间 */
+  .m-top { justify-content: flex-end; }            /* 左 CONTACT 隐藏，只留右侧 */
+  .m-contact { display: none; }                    /* 移动端隐藏 CONTACT 文字 */
+  .m-menu-text { display: none; }                  /* 移动端隐藏 MENU 文字 */
+
+  /* 黑色圆钮：浅色背景上清晰可见 */
+  .m-menu-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    box-shadow: 0 2px 8px rgba(20,20,20,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+  }
+
+  .m-hamburger { width: 18px; height: 18px; gap: 5px; }
+  .m-hamburger span { height: 1px; background: #fff; }
+
+  /* 菜单打开时：按钮反白（白底黑字），仍显示在右上角 */
+  .m-top.menu-open .m-menu-btn {
+    background: var(--paper);
+    border-color: var(--ink);
+  }
+  .m-top.menu-open .m-hamburger span { background: var(--ink); }
 }
 
 /* ============================================
