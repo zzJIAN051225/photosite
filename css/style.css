@@ -464,23 +464,33 @@ ul { list-style: none; }
   color: var(--faint);
 }
 
-/* ---------- 关于我 ---------- */
+/* ---------- 关于我 ----------
+   正常文档流布局：flex 响应式，圆形头像用相对单位，
+   不脱离文档流，避免移动端重叠/穿模 */
 .about-wrap {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 72px;
-  align-items: start;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: clamp(32px, 5vw, 72px);
+  flex-wrap: wrap;
 }
 
 .avatar {
-  width: 300px;
-  height: 300px;
+  flex-shrink: 0;
+  width: min(300px, 60vw);
+  height: min(300px, 60vw);
   border-radius: 50%;
   overflow: hidden;
   border: 1px solid var(--line);
+  margin: 0 auto 0 0;   /* 桌面左对齐 */
 }
 
-.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.about-bio {
+  flex: 1;
+  min-width: 280px;     /* 保证文字不塌陷，移动端自动换行 */
+}
 
 .about-bio p {
   color: var(--muted);
@@ -631,8 +641,11 @@ ul { list-style: none; }
   .section { padding: 80px 20px; }
   .grid { grid-template-columns: 1fr; gap: 16px; }
 
-  .about-wrap { grid-template-columns: 1fr; gap: 40px; }
-  .avatar { width: 180px; height: 180px; }
+  /* 移动端：关于我改为纵向排列，头像居中，不重叠 */
+  .about-wrap { flex-direction: column; align-items: center; gap: 36px; }
+  .avatar { width: min(200px, 55vw); height: min(200px, 55vw); margin: 0 auto; }
+  .about-bio { min-width: 0; width: 100%; text-align: center; }
+  .about-bio p { margin-left: auto; margin-right: auto; }
 
   .page-head { padding: calc(var(--nav-h) + 64px) 20px 32px; }
   .contact-row { flex-direction: column; gap: 6px; }
