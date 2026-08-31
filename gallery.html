@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=motion.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>作品集 · 香蕉黄油拿铁</title>
+  <meta name="description" content="风光 / 人像 / 街头 / 生活感照 精选作品">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a class="nav-brand" href="index.html">Banana Butter Latte</a>
+    <button class="nav-toggle" id="navToggle" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">首页</a>
+      <a href="motion.html" class="active">作品集</a>
+      <a href="about.html">关于我</a>
+      <a href="contact.html">联系</a>
+    </div>
+  </nav>
+
+  <header class="page-head">
+    <h1 class="page-title">作品集</h1>
+    <p class="page-desc">GALLERY · 精选每一张值得被看见的光影</p>
+  </header>
+
+  <!-- 上下大量留白：作品区约占屏幕高度三分之一 -->
+  <main class="gallery-main">
+    <div class="filter-bar" id="filterBar"></div>
+    <div class="grid" id="galleryGrid"></div>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lb-close" id="lbClose" aria-label="关闭">×</button>
+    <button class="lb-btn lb-prev" id="lbPrev" aria-label="上一张">‹</button>
+    <button class="lb-btn lb-next" id="lbNext" aria-label="下一张">›</button>
+    <div class="lightbox-inner">
+      <img id="lbImage" src="" alt="">
+      <div class="lightbox-meta">
+        <h3 id="lbTitle"></h3>
+        <p class="meta-line" id="lbMeta"></p>
+        <p class="story" id="lbStory"></p>
+      </div>
+    </div>
+    <div class="lb-counter" id="lbCounter"></div>
+  </div>
+
+  <footer class="footer">
+    <p class="foot-en">Banana Butter Latte</p>
+    <p class="foot-copy" id="year"></p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/gallery.js"></script>
+</body>
+</html>

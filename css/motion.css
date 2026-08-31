@@ -34,10 +34,12 @@ button { font-family: inherit; background: none; border: 0; cursor: pointer; col
   position: fixed;
   top: 0; left: 0; right: 0;
   height: 72px;
+  padding-top: env(safe-area-inset-top);  /* 避开 iPhone 刘海/状态栏 */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 44px;
+  padding-left: 44px;
+  padding-right: 44px;
   z-index: 100;
   mix-blend-mode: difference;   /* 无论背景深浅都保持可读 */
 }
@@ -127,7 +129,7 @@ button { font-family: inherit; background: none; border: 0; cursor: pointer; col
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  top: 96px;
+  top: calc(env(safe-area-inset-top) + 88px);  /* 避开状态栏/搜索栏 */
   display: flex;
   gap: 28px;
   z-index: 90;
@@ -168,8 +170,8 @@ button { font-family: inherit; background: none; border: 0; cursor: pointer; col
    浏览器原生保证滚动边界：永远不会"看不到最后一张" */
 .m-stage {
   position: relative;
-  height: 100vh;
-  height: 100svh;
+  height: 100vh;           /* 兜底 */
+  height: 100dvh;          /* 动态视口：手机地址栏收起/展开自适应 */
   display: flex;
   align-items: center;
   overflow-x: auto;
@@ -273,11 +275,13 @@ button { font-family: inherit; background: none; border: 0; cursor: pointer; col
   left: 0; right: 0;
   bottom: 0;
   height: 88px;
+  padding-bottom: env(safe-area-inset-bottom);  /* 避开 iPhone 底部条 */
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 0 44px;
+  padding-left: 44px;
+  padding-right: 44px;
   z-index: 100;
 }
 
@@ -563,7 +567,14 @@ button { font-family: inherit; background: none; border: 0; cursor: pointer; col
 
 @media (max-width: 900px) {
   .video-grid { grid-template-columns: 1fr; }
-  .video-frame img { aspect-ratio: 16 / 10; }
+  /* 详情页图片：保持原始宽高比，不强制 16:10（否则竖图被压扁）
+     宽度自适应，高度按比例自动，限高防止超屏 */
+  .video-frame img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 72dvh;
+  }
 }
 
 @media (max-width: 768px) {

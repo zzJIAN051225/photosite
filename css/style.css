@@ -39,11 +39,13 @@ ul { list-style: none; }
 .nav {
   position: fixed;
   inset: 0 0 auto 0;
-  height: var(--nav-h);
+  height: calc(var(--nav-h) + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);  /* 避开状态栏/刘海 */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 48px;
+  padding-left: 48px;
+  padding-right: 48px;
   background: transparent;
   transition: background 0.4s ease, backdrop-filter 0.4s ease;
   z-index: 100;
@@ -113,8 +115,8 @@ ul { list-style: none; }
 
 /* ---------- 首页 Hero（两阶段：纯黑呼吸名字 → 全屏背景图） ---------- */
 .hero {
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: 100vh;       /* 兜底 */
+  min-height: 100dvh;      /* 动态视口：手机地址栏收起/展开自适应 */
   position: relative;
   overflow: hidden;
   cursor: pointer; /* 提示可点击跳过等待 */
